@@ -1,0 +1,32 @@
+
+# bspc monitor -d I II III IV V VI VII VIII IX X
+if xrandr -q | grep ' connected ' | sed '/primary/d'; then
+
+    #if xrandr -q | grep ' connected primary '; then
+    MON1=$(xrandr -q | grep ' connected primary ' | awk 'BEGIN {FS=" "}{print $1}')
+    xrandr --output $MON1 --mode 1366x768
+    bspc monitor $MON1 -d I II III IV V VI VII VIII IX
+    #else
+    #fi
+
+    # Cargar el monitor principal(eDP-1)
+    #xrandr --output LVDS-1 --mode 1366x768
+    #bspc monitor LVDS-1 -d I II III IV V VI VII VIII IX
+
+    # Carga el segundo monitor(DP-1) a la derecha del primer monitor(eDP-1)
+    # Para ver los monitores: xrandr -q
+    xrandr --output VGA-1 --mode 1360x768 --right-of LVDS-1
+    bspc monitor VGA-1 -d X
+    #$MON2=$(xrandr -q | grep ' connected ' | sed '/primary/d' | awk 'BEGIN {FS=" "}{print $1}')
+    #$MON2=$(xrandr --listmonitors | grep '1:' | awk 'BEGIN {SP=" "}{print $4}')
+    #$MON2=$(xrandr --listmonitors | awk 'BEGIN {SP=" "}{print $4}' | sed "/$MON1/d")
+    #xrandr --output $MON2 --mode 1360x768 --right-of $MON1
+    #bspc monitor $MON2 -d X
+
+else
+    $MON1=$(xrandr -q | grep ' connected primary ' | awk 'BEGIN {FS=" "}{print $1}')
+    # Cargar el monitor principal
+    # xrandr --output LVDS-1 --mode 1366x768
+    xrandr --output $MON1 --mode 1366x768
+    bspc monitor $MON1 -d I II III IV V VI VII VIII IX X
+fi

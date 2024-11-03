@@ -1,0 +1,89 @@
+#! /bin/sh
+
+#  _
+# | |__  ___ _ ____      ___ __  _ __ ___
+# | '_ \/ __| '_ \ \ /\ / / '_ \| '__/ __|
+# | |_) \__ \ |_) \ V  V /| | | | | | (__
+# |_.__/|___/ .__/ \_/\_/ |_| |_|_|  \___|
+#           |_|
+
+# Configurar teclado en inglés
+setxkbmap us &
+
+# Configurar redshift
+bash ~/.config/bspwm/scripts/redshift.sh &
+
+# Si existe el proceso sxhkd lo finaliza y luego lo inicia
+pgrep -x sxhkd > /dev/null || sxhkd &
+
+# Iniciar polybar
+#$HOME/.config/polybar/launch.sh --shape &
+#bash ~/.config/polybar/launch.sh --shapes &
+bash ~/.config/polybar/launch.sh --clasico &
+
+# Configurar fondo de pantalla con nitrogen
+nitrogen --restore &
+
+# Manejar transparencias con picom
+bash ~/.config/bspwm/scripts/picom.sh &
+#/usr/local/bin/src/picom -f &
+
+# fix for some Java apps
+# Arregla algunas apps de java (como netbeans)
+wmname LG3D &
+
+# Crear el numero de escritorios o areas de trabajo (I II ...)
+bash ~/.config/bspwm/scripts/xrandr-bspc.sh &
+
+# Automontar mi carpeta de GoogleDrive
+fusermount -u /Datos/RClonGoogleDrive &
+#mount -o rsize=500M,wsize=500M GoogleDrive:/ /Datos/RClonGoogleDrive &
+rclone mount GoogleDrive:/ /Datos/RClonGoogleDrive &
+
+#bspc config window_gap          12              # Ancho de separacion entre ventanas
+#bspc config border_width         3              # Ancho del borde de la ventana
+bspc config window_gap           0              # Ancho de separacion entre ventanas
+bspc config border_width         2              # Ancho del borde de la ventana
+bspc config normal_border_color \#689d6a
+bspc config active_border_color \#458588
+bspc config focused_border_color    \#d65d0e
+
+bspc config split_ratio          0.52
+bspc config borderless_monocle   false          # Activara los bordes en modo monoculo
+bspc config gapless_monocle      false          # Activara la separacion entre ventanas en modo tiling
+
+bspc rule -a Gimp desktop='^8' state=floating follow=on
+bspc rule -a Chromium desktop='^2'
+bspc rule -a mplayer2 state=floating
+bspc rule -a Kupfer.py focus=on
+bspc rule -a Screenkey manage=off
+
+bspc rule -a qutebrowser desktop='^2' follow=on
+bspc rule -a librewolf desktop='^3'
+bspc rule -a firefox desktop='^2'
+bspc rule -a Google-chrome desktop='^3'
+bspc rule -a Midori desktop='^4'
+bspc rule -a telegramRun desktop='^4'
+bspc rule -a TelegramDesktop desktop='^4'
+#bspc rule -a zoom desktop='^6'
+bspc rule -a wpsoffice desktop='^10'
+
+bspc rule -a Gnome-mines desktop='^10' follow=on
+
+# Ventanas flotantes
+bspc rule -a feh state=floating center=true rectangle=1100x640+0+0
+bspc rule -a vlc state=floating center=true rectangle=1100x640+0+0
+bspc rule -a parole state=floating center=true rectangle=1100x640+0+0
+bspc rule -a mpv state=floating center=true rectangle=1100x640+0+0
+bspc rule -a zathura state=floating center=true rectangle=1100x640+0+0
+bspc rule -a MuPDF state=floating center=true rectangle=1100x640+0+0
+bspc rule -a Engrampa state=floating center=true rectangle=1100x640+0+0
+
+# Ventanas flotantes dinamicas
+bspc rule -a calendario state=floating sticky=on center=true rectangle=1100x640+0+0
+bspc rule -a music-player state=floating sticky=on center=true rectangle=1100x640+0+0
+bspc rule -a nvim-translate state=floating sticky=on center=true rectangle=1100x640+0+0
+bspc rule -a notes-vimwki state=floating sticky=on center=true rectangle=1100x640+0+0
+#bspc rule -a scratchpad state=floating sticky=on center=true rectangle=1100x640+0+0
+bspc rule -a main:SFM state=floating
+bspc rule -a surf:Surf state=tiling
